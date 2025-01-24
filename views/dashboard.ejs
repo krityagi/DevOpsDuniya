@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/styles/dashboard.css">
+</head>
+<body class="light-mode">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">DevOps Duniya</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/services">Services</a>
+                </li>
+            </ul>
+            <form class="form-inline" id="searchForm">
+                <input class="form-control mr-sm-2" type="search" id="searchInput" placeholder="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="darkModeToggle">
+                <label class="custom-control-label" for="darkModeToggle">Dark Mode</label>
+            </div>
+            <a class="nav-link" href="#" id="profile">Profile</a>
+            <a class="nav-link" href="/logout" id="logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <main>
+            <section class="dashboard-overview">
+                <h3>Dashboard Overview</h3>
+                <p>This is where you can add dashboard features.</p>
+            </section>
+            <section class="row dashboard-content">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Feature 1</h4>
+                            <p class="card-text">Details about feature 1.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Feature 2</h4>
+                            <p class="card-text">Details about feature 2.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Feature 3</h4>
+                            <p class="card-text">Details about feature 3.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for User Profile -->
+    <div id="profileModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Name:</strong> <%= user.name %></p>
+                    <p><strong>Email:</strong> <%= user.email %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode toggle functionality
+        const toggleSwitch = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        toggleSwitch.addEventListener('change', () => {
+            body.classList.toggle('dark-mode');
+            body.classList.toggle('light-mode');
+        });
+
+        // Search functionality
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchInput').value;
+            alert('You searched for: ' + query); // Replace with actual search functionality
+        });
+
+        // Logout functionality
+        document.getElementById('logout').addEventListener('click', function (event) {
+            event.preventDefault();
+            fetch('/logout', { method: 'GET' })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.message === 'Logout successful') {
+                        window.location.href = result.redirectUrl;
+                    } else {
+                        alert('Logout failed: ' + result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Logout Error:', error);
+                    alert('An error occurred during logout.');
+                });
+        });
+
+        // Profile modal functionality
+        const profileLink = document.getElementById('profile');
+        profileLink.onclick = function(event) {
+            event.preventDefault();
+            $('#profileModal').modal('show');
+        }
+    </script>
+</body>
+</html>

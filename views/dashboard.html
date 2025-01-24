@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/styles/dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="#" id="profile">Profile</a>
+                <a href="/logout" id="logout">Logout</a>
+            </nav>
+        </header>
+        <main>
+            <section class="dashboard-overview">
+                <h3>Dashboard Overview</h3>
+                <p>This is where you can add dashboard features.</p>
+            </section>
+            <section class="dashboard-content">
+                <div class="card">
+                    <h4>Feature 1</h4>
+                    <p>Details about feature 1.</p>
+                </div>
+                <div class="card">
+                    <h4>Feature 2</h4>
+                    <p>Details about feature 2.</p>
+                </div>
+                <div class="card">
+                    <h4>Feature 3</h4>
+                    <p>Details about feature 3.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for User Profile -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>User Profile</h3>
+            <p><strong>Name:</strong> <%= user.name %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+        </div>
+    </div>
+
+    <script>
+        // Logout functionality
+        document.getElementById('logout').addEventListener('click', function (event) {
+            event.preventDefault();
+            fetch('/logout', { method: 'GET' })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.message === 'Logout successful') {
+                        window.location.href = result.redirectUrl;
+                    } else {
+                        alert('Logout failed: ' + result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Logout Error:', error);
+                    alert('An error occurred during logout.');
+                });
+        });
+
+        // Profile modal functionality
+        const modal = document.getElementById('profileModal');
+        const profileLink = document.getElementById('profile');
+        const closeModal = document.getElementsByClassName('close')[0];
+
+        profileLink.onclick = function(event) {
+            event.preventDefault();
+            modal.style.display = 'block';
+        }
+
+        closeModal.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
