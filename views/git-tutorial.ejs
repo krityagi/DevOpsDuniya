@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Git Tutorial</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -12,7 +12,7 @@
 </head>
 <body class="light-mode">
     <nav class="navbar navbar-expand-lg custom-navbar fixed-top">
-        <a class="navbar-brand" href="#">DevOps Duniya</a>
+        <a class="navbar-brand" href="/dashboard">DevOps Duniya</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -46,7 +46,7 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="/git-tutorial">Git</a>
+                            <a class="nav-link active" href="/git-tutorial">Git</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/jenkins-tutorial">Jenkins</a>
@@ -62,9 +62,63 @@
                 </div>
             </nav>
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 main-content">
-                <div id="welcome-message">
-                    <h2>Welcome to DevOps Duniya</h2>
-                    <p>Select a tutorial from the sidebar to get started.</p>
+                <div id="git-tutorial">
+                    <h2>Git Tutorial</h2>
+                    <p>Git is a distributed version control system that allows developers to track changes in their codebase, collaborate with others, and manage different versions of their projects efficiently. Created by Linus Torvalds in 2005, Git has become an essential tool in modern software development.</p>
+                    
+                    <h3>Key Features of Git</h3>
+                    <ul>
+                        <li><strong>Distributed System:</strong> Each developer has a local copy of the entire project history, allowing for offline work and easier collaboration.</li>
+                        <li><strong>Branching and Merging:</strong> Git enables the creation of branches to work on features or fixes independently. These branches can later be merged back into the main codebase.</li>
+                        <li><strong>Staging Area:</strong> Changes can be reviewed and modified before committing them to the project history.</li>
+                        <li><strong>History Tracking:</strong> Git keeps a detailed history of changes, including who made the change and why.</li>
+                    </ul>
+
+                    <h3>Basic Git Commands</h3>
+                    <ul>
+                        <li><code>git init</code>: Initialize a new Git repository.</li>
+                        <li><code>git clone [url]</code>: Clone a repository from a remote source.</li>
+                        <li><code>git add [file]</code>: Add a file to the staging area.</li>
+                        <li><code>git commit -m "message"</code>: Commit changes with a message describing what was done.</li>
+                        <li><code>git status</code>: Check the status of your working directory and staging area.</li>
+                        <li><code>git push</code>: Push changes to a remote repository.</li>
+                        <li><code>git pull</code>: Pull the latest changes from a remote repository.</li>
+                    </ul>
+
+                    <h3>Setting Up Git</h3>
+                    <ol>
+                        <li><strong>Install Git:</strong> Download and install Git from the <a href="https://git-scm.com/">official website</a>.</li>
+                        <li><strong>Configure Git:</strong> Set up your name and email address, which will be associated with your commits:
+                            <pre><code>git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"</code></pre>
+                        </li>
+                        <li><strong>Create a Repository:</strong> Navigate to your project directory and initialize a new Git repository:
+                            <pre><code>cd /path/to/your/project
+git init</code></pre>
+                        </li>
+                    </ol>
+
+                    <h3>Working with Branches</h3>
+                    <ul>
+                        <li><strong>Create a New Branch:</strong>
+                            <pre><code>git branch new-feature</code></pre>
+                        </li>
+                        <li><strong>Switch to the New Branch:</strong>
+                            <pre><code>git checkout new-feature</code></pre>
+                        </li>
+                        <li><strong>Merge the Branch:</strong> Once you're done with your changes, you can merge the branch back into the main branch:
+                            <pre><code>git checkout main
+git merge new-feature</code></pre>
+                        </li>
+                    </ul>
+
+                    <h3>Best Practices for Using Git</h3>
+                    <ul>
+                        <li><strong>Commit Frequently:</strong> Regular commits make it easier to track changes and revert if necessary.</li>
+                        <li><strong>Write Meaningful Commit Messages:</strong> Clear and descriptive messages help understand the purpose of each commit.</li>
+                        <li><strong>Use Branches:</strong> Keep your main branch clean and use feature branches for development.</li>
+                        <li><strong>Review Changes:</strong> Use the <code>git diff</code> command to review changes before committing.</li>
+                    </ul>
                 </div>
             </main>
         </div>

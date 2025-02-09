@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER, // Your email address
-        pass: process.env.EMAIL_PASS, // Your email password
+        pass: process.env.EMAIL_PASS, // Your email password,
     },
 });
 
@@ -31,11 +31,13 @@ function isAuthenticated(req, res, next) {
 
 // Middleware for admin-only access
 function isAdmin(req, res, next) {
+    console.log('Checking admin role:', req.session.user); // Log session user
     if (req.session.user && req.session.user.role === 'admin') {
         return next();
     }
     return res.status(403).send('Access denied');
 }
+
 
 // Apply rate limiting to login routes
 const loginLimiter = rateLimit({
@@ -55,16 +57,26 @@ router.get('/register', (req, res) => {
 });
 
 // Route: Dashboard (Protected)
-/*router.get('/dashboard', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/dashboard.html'));
-});*/
-
 router.get('/dashboard', isAuthenticated, (req, res) => {
     res.render('dashboard', { user: req.session.user });
 });
 
+// Routes for Tutorials (Protected)
+router.get('/git-tutorial', isAuthenticated, (req, res) => {
+    res.render('git-tutorial', { user: req.session.user });
+});
 
+router.get('/jenkins-tutorial', isAuthenticated, (req, res) => {
+    res.render('jenkins-tutorial', { user: req.session.user });
+});
 
+router.get('/shell-tutorial', isAuthenticated, (req, res) => {
+    res.render('shell-tutorial', { user: req.session.user });
+});
+
+router.get('/python-tutorial', isAuthenticated, (req, res) => {
+    res.render('python-tutorial', { user: req.session.user });
+});
 
 // Route: Admin Dashboard (Admin-Only)
 router.get('/admin', isAdmin, (req, res) => {
@@ -112,6 +124,9 @@ router.post('/login', loginLimiter, async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
+        // Log the user role for debugging
+        console.log('User role:', user.role);
+        
         // Set up session
         req.session.user = user;
         console.log('Login successful');
@@ -121,7 +136,6 @@ router.post('/login', loginLimiter, async (req, res) => {
         res.status(500).json({ message: 'Error during login: ' + err });
     }
 });
-
 
 
 // Logout Route
@@ -134,7 +148,6 @@ router.get('/logout', (req, res) => {
         res.status(200).json({ message: 'Logout successful', redirectUrl: '/login' });
     });
 });
-
 
 // Forgot Password Route - Step 1: Send Reset Email
 router.post('/forgot-password', async (req, res) => {

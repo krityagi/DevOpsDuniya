@@ -5,6 +5,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const port = 3000;
@@ -33,6 +34,7 @@ app.use(session({
 
 // Routes
 app.use(authRoutes);
+app.use('/admin', adminRoutes);
 
 // Serve static files (CSS, JS, etc.)
 app.use('/styles', express.static(path.join(__dirname, 'public/styles')));
