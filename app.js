@@ -1,45 +1,46 @@
-require('dotenv').config(); // Load environment variables
-const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const authRoutes = require('./routes/auth');
-const adminRoutes = require('./routes/admin');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const authRoutes = require('./routes/auth').router; 
+const adminRoutes = require('./routes/admin'); 
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-// Set EJS as the templating engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log('MongoDB connection error: ', err));
 
-// Middleware
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Set up session management using environment variable for secret
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set to 'true' for HTTPS in production
+    cookie: { secure: false }
 }));
 
-// Routes
-app.use(authRoutes);
-app.use('/admin', adminRoutes);
+// Add a route to handle GET requests to the root URL
+app.get('/', (req, res) => {
+    res.send('Welcome to the Home Page!');
+});
 
-// Serve static files (CSS, JS, etc.)
-app.use('/styles', express.static(path.join(__dirname, 'public/styles')));
+app.use(authRoutes); // Use authRoutes directly without `.router`
+app.use('/admin', adminRoutes); // adminRoutes is already exporting the router
 
-// Start the server
+console.log('Admin routes added'); 
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}/login`);
 });

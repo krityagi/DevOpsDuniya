@@ -1,68 +1,63 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const User = require('../models/User'); // Import the User model
+const User = require('../models/User'); 
 const path = require('path');
 const session = require('express-session');
-const crypto = require('crypto'); // For password reset
-const nodemailer = require('nodemailer'); // For sending emails
-const rateLimit = require('express-rate-limit'); // Import rate-limiting
+const crypto = require('crypto'); 
+const nodemailer = require('nodemailer'); 
+const rateLimit = require('express-rate-limit');
 const router = express.Router();
 
-// Load environment variables
 require('dotenv').config();
 
-// Email setup with Nodemailer
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER, // Your email address
-        pass: process.env.EMAIL_PASS, // Your email password,
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS, 
     },
 });
 
-// Middleware to protect routes
 function isAuthenticated(req, res, next) {
     if (req.session && req.session.user) {
-        return next(); // User is authenticated; proceed to the next middleware
+        return next(); 
     } else {
-        return res.status(401).redirect('/login'); // User is not authenticated; redirect to login
+        return res.status(401).redirect('/login'); 
     }
 }
 
-// Middleware for admin-only access
 function isAdmin(req, res, next) {
-    console.log('Checking admin role:', req.session.user); // Log session user
+    console.log('isAdmin middleware invoked'); 
     if (req.session.user && req.session.user.role === 'admin') {
+        console.log('Admin access granted');
         return next();
     }
+    console.log('Admin access denied'); 
     return res.status(403).send('Access denied');
 }
-module.exports = { isAdmin };
 
+console.log('Defining isAdmin middleware'); 
+module.exports.isAdmin = isAdmin;
+console.log('Exporting isAdmin middleware'); 
 
-// Apply rate limiting to login routes
 const loginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // Limit each IP to 5 requests per windowMs
+    windowMs: 15 * 60 * 1000,
+    max: 5, 
     message: 'Too many login attempts, please try again later.',
 });
 
-// Route: Login Page
 router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/login.html'));
 });
 
-// Route: Registration Page
 router.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/register.html'));
 });
 
-// Route: Dashboard (Protected)
 router.get('/dashboard', isAuthenticated, (req, res) => {
     res.render('dashboard', { user: req.session.user });
 });
 
-// Routes for Tutorials (Protected)
 router.get('/git-tutorial', isAuthenticated, (req, res) => {
     res.render('git-tutorial', { user: req.session.user });
 });
@@ -79,12 +74,10 @@ router.get('/python-tutorial', isAuthenticated, (req, res) => {
     res.render('python-tutorial', { user: req.session.user });
 });
 
-// Route: Admin Dashboard (Admin-Only)
 router.get('/admin', isAdmin, (req, res) => {
     res.send('Welcome to the Admin Dashboard');
 });
 
-// Register Route
 router.post('/register', async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
 
@@ -108,7 +101,6 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Login Route (with rate limiting)
 router.post('/login', loginLimiter, async (req, res) => {
     const { email, password } = req.body;
 
@@ -125,10 +117,8 @@ router.post('/login', loginLimiter, async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        // Log the user role for debugging
         console.log('User role:', user.role);
         
-        // Set up session
         req.session.user = user;
         console.log('Login successful');
         res.status(200).json({ message: 'Login successful', redirectUrl: '/dashboard' });
@@ -138,8 +128,6 @@ router.post('/login', loginLimiter, async (req, res) => {
     }
 });
 
-
-// Logout Route
 router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -150,7 +138,6 @@ router.get('/logout', (req, res) => {
     });
 });
 
-// Forgot Password Route - Step 1: Send Reset Email
 router.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
@@ -161,12 +148,11 @@ router.post('/forgot-password', async (req, res) => {
 
     const token = crypto.randomBytes(20).toString('hex');
     user.resetToken = token;
-    user.resetTokenExpiry = Date.now() + 3600000; // Token valid for 1 hour
+    user.resetTokenExpiry = Date.now() + 3600000; 
     await user.save();
 
     const resetLink = `http://localhost:3000/reset-password/${token}`;
 
-    // Send reset email
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: email,
@@ -182,7 +168,6 @@ router.post('/forgot-password', async (req, res) => {
     });
 });
 
-// Reset Password Route - Step 2: Reset User's Password
 router.post('/reset-password/:token', async (req, res) => {
     const { token } = req.params;
     const { password, confirmPassword } = req.body;
@@ -210,4 +195,4 @@ router.post('/reset-password/:token', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports.router = router;

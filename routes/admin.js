@@ -1,7 +1,9 @@
 const express = require('express');
-const User = require('../models/User'); // Adjust the path as needed
+const User = require('../models/User');
+const { isAdmin } = require('./auth'); // Correct import path
 const router = express.Router();
-const { isAdmin } = require('../routes/auth'); // Assuming you have an auth middleware
+
+console.log('isAdmin middleware:', isAdmin); // Verify import
 
 // View Users
 router.get('/users', isAdmin, async (req, res) => {
