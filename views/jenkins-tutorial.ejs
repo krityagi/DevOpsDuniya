@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jenkins Tutorial</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css">
+    <link rel="stylesheet" href="/styles/dashboard.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</head>
+<body class="light-mode">
+    <nav class="navbar navbar-expand-lg custom-navbar fixed-top">
+        <a class="navbar-brand" href="/dashboard">DevOps Duniya</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/services">Services</a>
+                </li>
+            </ul>
+            <form class="form-inline" id="searchForm">
+                <input class="form-control mr-sm-2" type="search" id="searchInput" placeholder="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="darkModeToggle">
+                <label class="custom-control-label" for="darkModeToggle">Dark Mode</label>
+            </div>
+            <a class="nav-link" href="#" id="profile">Profile</a>
+            <a class="nav-link" href="/logout" id="logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/git-tutorial">Git</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/jenkins-tutorial">Jenkins</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/shell-tutorial">Shell</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/python-tutorial">Python</a>
+                        </li>
+                        <!-- Add more tutorials here -->
+                    </ul>
+                </div>
+            </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 main-content">
+                <div id="jenkins-tutorial">
+                    <h2>Jenkins Tutorial</h2>
+                    <p>Jenkins is an open-source automation server that helps automate the parts of software development related to building, testing, and deploying, facilitating continuous integration and continuous delivery (CI/CD). Jenkins is highly extensible with a rich ecosystem of plugins.</p>
+                    
+                    <h3>Key Features of Jenkins</h3>
+                    <ul>
+                        <li><strong>Extensible:</strong> Jenkins has a rich ecosystem of plugins that extend its capabilities.</li>
+                        <li><strong>Distributed Builds:</strong> Jenkins can distribute build tasks across multiple machines, improving performance and reliability.</li>
+                        <li><strong>Pipeline as Code:</strong> Jenkins allows you to define your build pipeline as code using the Jenkinsfile.</li>
+                        <li><strong>Integration:</strong> Jenkins integrates with many version control systems, build tools, and cloud providers.</li>
+                    </ul>
+
+                    <h3>Basic Jenkins Setup</h3>
+                    <ol>
+                        <li><strong>Install Jenkins:</strong> Download and install Jenkins from the <a href="https://www.jenkins.io/">official website</a>.</li>
+                        <li><strong>Start Jenkins:</strong> Start the Jenkins service and access the web interface at <code>http://localhost:8080</code>.</li>
+                        <li><strong>Unlock Jenkins:</strong> Follow the instructions to unlock Jenkins using the initial admin password.</li>
+                        <li><strong>Install Plugins:</strong> Install the recommended plugins during the setup process.</li>
+                        <li><strong>Create Admin User:</strong> Create an admin user to manage Jenkins.</li>
+                    </ol>
+
+                    <h3>Creating a Jenkins Pipeline</h3>
+                    <ul>
+                        <li><strong>Create a New Pipeline:</strong> In Jenkins, create a new pipeline job and configure it to use a Jenkinsfile from your repository.</li>
+                        <li><strong>Define the Jenkinsfile:</strong> Create a <code>Jenkinsfile</code> in your repository to define the pipeline stages:
+                            <pre><code class="language-groovy">pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                // Add build steps here
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                // Add test steps here
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
+                // Add deploy steps here
+            }
+        }
+    }
+}</code></pre>
+                        </li>
+                        <li><strong>Run the Pipeline:</strong> Save the Jenkinsfile and run the pipeline job in Jenkins to see the stages execute.</li>
+                    </ul>
+
+                    <h3>Advanced Jenkins Topics</h3>
+                    <ul>
+                        <li><strong>Using Credentials:</strong> Manage and use credentials securely in Jenkins:
+                            <pre><code class="language-groovy">pipeline {
+    agent any
+    environment {
+        GIT_CREDENTIALS = credentials('git-credentials-id')
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/your-repo.git', credentialsId: "${GIT_CREDENTIALS}"
+            }
+        }
+        // Add more stages here
+    }
+}</code></pre>
+                        </li>
+                        <li><strong>Parallel Stages:</strong> Run stages in parallel to speed up the pipeline:
+                            <pre><code class="language-groovy">pipeline {
+    agent any
+    stages {
+        stage('Parallel Stages') {
+            parallel {
+                stage('Build') {
+                    steps {
+                        echo 'Building...'
+                        // Add build steps here
+                    }
+                }
+                stage('Test') {
+                    steps {
+                        echo 'Testing...'
+                        // Add test steps here
+                    }
+                }
+            }
+        }
+        // Add more stages here
+    }
+}</code></pre>
+                        </li>
+                        <li><strong>Post Actions:</strong> Define actions to run after the pipeline completes:
+                            <pre><code class="language-groovy">pipeline {
+    agent any
+    stages {
+        // Define stages here
+    }
+    post {
+        always {
+            echo 'This will always run'
+        }
+        success {
+            echo 'This will run only if the pipeline succeeds'
+        }
+        failure {
+            echo 'This will run only if the pipeline fails'
+        }
+    }
+}</code></pre>
+                        </li>
+                    </ul>
+
+                    <h3>Best Practices for Using Jenkins</h3>
+                    <ul>
+                        <li><strong>Use Declarative Pipelines:</strong> Use the declarative syntax for defining pipelines to improve readability and maintainability.</li>
+                        <li><strong>Keep Jenkinsfile in Source Control:</strong> Store the Jenkinsfile in your repository to version control your pipeline configuration.</li>
+                        <li><strong>Use Shared Libraries:</strong> Create shared libraries for common pipeline code to promote reuse and consistency.</li>
+                        <li><strong>Monitor and Maintain Jenkins:</strong> Regularly monitor Jenkins and keep it updated to ensure security and performance.</li>
+                    </ul>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode toggle functionality
+        const toggleSwitch = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        toggleSwitch.addEventListener('change', () => {
+            body.classList.toggle('dark-mode');
+            body.classList.toggle('light-mode');
+        });
+
+        // Search functionality
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchInput').value;
+            alert('You searched for: ' + query); // Replace with actual search functionality
+        });
+
+        // Logout functionality
+        document.getElementById('logout').addEventListener('click', function (event) {
+            event.preventDefault();
+            fetch('/logout', { method: 'GET' })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.message === 'Logout successful') {
+                        window.location.href = result.redirectUrl;
+                    } else {
+                        alert('Logout failed: ' + result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Logout Error:', error);
+                    alert('An error occurred during logout.');
+                });
+        });
+
+        // Profile modal functionality
+        const profileLink = document.getElementById('profile');
+        profileLink.onclick = function(event) {
+            event.preventDefault();
+            $('#profileModal').modal('show');
+        }
+    </script>
+</body>
+</html>

@@ -31,6 +31,12 @@ app.use(session({
     cookie: { secure: false }
 }));
 
+// Middleware to make user data available in all templates
+app.use((req, res, next) => {
+    res.locals.user = req.session.user; // Make user available in templates
+    next();
+});
+
 // Add a route to handle GET requests to the root URL
 app.get('/', (req, res) => {
     res.send('Welcome to the Home Page!');

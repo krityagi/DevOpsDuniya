@@ -1,42 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Users</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        .full-width {
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .action-buttons form {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Admin Users</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% users.forEach(user => { %>
-            <tr>
-                <td><%= user.name %></td>
-                <td><%= user.email %></td>
-                <td><%= user.role %></td>
-                <td>
-                    <form action="/admin/users/edit/<%= user._id %>" method="POST">
-                        <input type="text" name="name" value="<%= user.name %>" placeholder="Name">
-                        <input type="email" name="email" value="<%= user.email %>" placeholder="Email">
-                        <select name="role">
-                            <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
-                            <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
-                        </select>
-                        <button type="submit">Update</button>
-                    </form>
-                    <form action="/admin/users/delete/<%= user._id %>" method="POST">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            <% }); %>
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>Admin Users</h1>
+        <div class="row mb-3">
+            <div class="col">
+                <h2>Total Users: <%= users.length %></h2>
+            </div>
+            <div class="col text-right">
+                <!-- Email Notification Form -->
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#emailModal">Send Email Notification</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered full-width">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.role %></td>
+                        <td class="action-buttons">
+                            <form action="/admin/users/edit/<%= user._id %>" method="POST">
+                                <input type="text" name="name" value="<%= user.name %>" placeholder="Name" class="form-control">
+                                <input type="email" name="email" value="<%= user.email %>" placeholder="Email" class="form-control">
+                                <select name="role" class="form-control">
+                                    <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
+                                    <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                            </form>
+                            <form action="/admin/users/delete/<%= user._id %>" method="POST">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emailModalLabel">Send Email Notification</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/admin/notify-users" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="emailSubject">Subject</label>
+                            <input type="text" class="form-control" id="emailSubject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailBody">Email Body</label>
+                            <textarea class="form-control" id="emailBody" name="body" rows="5" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Send Email</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

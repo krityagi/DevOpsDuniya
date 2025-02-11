@@ -36,6 +36,9 @@
                 <input type="checkbox" class="custom-control-input" id="darkModeToggle">
                 <label class="custom-control-label" for="darkModeToggle">Dark Mode</label>
             </div>
+            <% if ( user.role === 'admin') { %>
+                <a class="nav-link" href="/admin/users" id="manageUsers">Manage Users</a>
+            <% } %>
             <a class="nav-link" href="#" id="profile">Profile</a>
             <a class="nav-link" href="/logout" id="logout">Logout</a>
         </div>

@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Git Tutorial</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css">
+    <link rel="stylesheet" href="/styles/dashboard.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/styles/dashboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
 </head>
 <body class="light-mode">
     <nav class="navbar navbar-expand-lg custom-navbar fixed-top">
@@ -89,11 +91,11 @@
                     <ol>
                         <li><strong>Install Git:</strong> Download and install Git from the <a href="https://git-scm.com/">official website</a>.</li>
                         <li><strong>Configure Git:</strong> Set up your name and email address, which will be associated with your commits:
-                            <pre><code>git config --global user.name "Your Name"
+                            <pre><code class="language-bash">git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"</code></pre>
                         </li>
                         <li><strong>Create a Repository:</strong> Navigate to your project directory and initialize a new Git repository:
-                            <pre><code>cd /path/to/your/project
+                            <pre><code class="language-bash">cd /path/to/your/project
 git init</code></pre>
                         </li>
                     </ol>
@@ -101,14 +103,31 @@ git init</code></pre>
                     <h3>Working with Branches</h3>
                     <ul>
                         <li><strong>Create a New Branch:</strong>
-                            <pre><code>git branch new-feature</code></pre>
+                            <pre><code class="language-bash">git branch new-feature</code></pre>
                         </li>
                         <li><strong>Switch to the New Branch:</strong>
-                            <pre><code>git checkout new-feature</code></pre>
+                            <pre><code class="language-bash">git checkout new-feature</code></pre>
                         </li>
                         <li><strong>Merge the Branch:</strong> Once you're done with your changes, you can merge the branch back into the main branch:
-                            <pre><code>git checkout main
+                            <pre><code class="language-bash">git checkout main
 git merge new-feature</code></pre>
+                        </li>
+                    </ul>
+
+                    <h3>Advanced Git Commands</h3>
+                    <ul>
+                        <li><strong>Rebase:</strong> Reapply commits on top of another base tip:
+                            <pre><code class="language-bash">git rebase main</code></pre>
+                        </li>
+                        <li><strong>Stash:</strong> Temporarily store changes that are not ready to be committed:
+                            <pre><code class="language-bash">git stash
+git stash pop</code></pre>
+                        </li>
+                        <li><strong>Resolve Merge Conflicts:</strong> Manually resolve conflicts that arise during a merge:
+                            <pre><code class="language-bash">git merge feature-branch
+# Resolve conflicts in files
+git add resolved-file
+git commit</code></pre>
                         </li>
                     </ul>
 
