@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "gcr.io/[YOUR_PROJECT_ID]/devopsduniya:${env.BUILD_NUMBER}"
+        DOCKER_IMAGE = "gcr.io/devopsduniya/devopsduniya:${env.BUILD_NUMBER}"
     }
 
     stages {
