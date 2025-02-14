@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devopsduniya
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: devopsduniya
+  template:
+    metadata:
+      labels:
+        app: devopsduniya
+    spec:
+      containers:
+      - name: devopsduniya
+        image: gcr.io/devopsduniya/devopsduniya:v1
+        ports:
+        - containerPort: 3000

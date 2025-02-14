@@ -1,42 +1,32 @@
 pipeline {
     agent any
+
     environment {
-        GCP_PROJECT = 'devopsduniya'
-        IMAGE_NAME = "gcr.io/${GCP_PROJECT}/DevOpsDuniya"
-        KUBE_CONFIG = credentials('kube-config')
-        DOCKER_CREDENTIALS = 'gcr:credentialsId' // Add your Docker credentials ID here
+        DOCKER_IMAGE = "gcr.io/devopsduniya/devopsduniya:${env.BUILD_NUMBER}"
     }
+
     stages {
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/your-username/your-repo.git', branch: 'main'
-            }
-        }
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build(IMAGE_NAME)
+                    docker.build(DOCKER_IMAGE)
                 }
             }
         }
-        stage('Push') {
+        stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://gcr.io', DOCKER_CREDENTIALS) {
-                        docker.image(IMAGE_NAME).push('latest')
+                    docker.withRegistry('https://gcr.io', 'gcr:service-account') {
+                        docker.image(DOCKER_IMAGE).push()
                     }
                 }
             }
         }
-        stage('Deploy') {
-            steps {
-                script {
-                    withKubeConfig([credentialsId: KUBE_CONFIG]) {
-                        sh 'kubectl apply -f k8s/deployment.yaml'
-                        sh 'kubectl apply -f k8s/service.yaml'
-                    }
-                }
-            }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
