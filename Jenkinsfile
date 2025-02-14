@@ -15,9 +15,13 @@ pipeline {
         }
         stage('Push Docker Image') {
             steps {
-                script {
-                    docker.withRegistry('https://gcr.io', 'gcr:service-account') {
-                        sh 'docker push ${DOCKER_IMAGE}'
+                withCredentials([file(credentialsId: 'gcr-service-account', variable: 'GCP_KEYFILE')]) {
+                    script {
+                        sh '''
+                        gcloud auth activate-service-account --key-file=$GCP_KEYFILE
+                        gcloud auth configure-docker
+                        docker push ${DOCKER_IMAGE}
+                        '''
                     }
                 }
             }
