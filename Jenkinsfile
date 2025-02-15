@@ -9,6 +9,13 @@ pipeline {
         stage('Checkout Master Branch') {
             steps {
                 script {
+                    // Skip pipeline if the commit message contains '[ci skip]'
+                    def skipBuild = sh(script: "git log -1 --pretty=%B", returnStdout: true).contains('[ci skip]')
+                    if (skipBuild) {
+                        currentBuild.result = 'SUCCESS'
+                        error('Skipping build as this is a [ci skip] commit')
+                    }
+                    
                     sh """
                     git checkout master
                     git pull origin master
@@ -45,8 +52,8 @@ pipeline {
                         git config --global user.email 'ktyagi0602@gmail.com'
                         git config --global user.name 'krityagi'
                         git add k8s/deployment.yaml
-                        git commit -m 'Update image tag to ${env.BUILD_NUMBER}'
-                        git push https://krityagi:${GITHUB_TOKEN}@github.com/krityagi/devopsduniya.git master
+                        git commit -m 'Update image tag to ${env.BUILD_NUMBER} [ci skip]'
+                        git push https://krityagi:${GITHUB_TOKEN}@github.com/krityagi/DevOpsDuniya.git master
                         """
                     }
                 }
