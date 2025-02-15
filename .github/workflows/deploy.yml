@@ -28,9 +28,9 @@ jobs:
           gcloud container clusters get-credentials k8s-cluster --zone europe-west1-b --project ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Deploy to GKE
+        if: github.event_name == 'repository_dispatch' && github.event.action == 'jenkins_trigger' && github.event.client_payload.tag != null
         env:
           IMAGE_TAG: ${{ github.event.client_payload.tag }}
-        if: github.event_name == 'repository_dispatch' && github.event.client_payload.event_type == 'jenkins_trigger'
         run: |
           envsubst < k8s/deployment.yaml | kubectl apply -f -
           kubectl apply -f k8s/service.yaml
