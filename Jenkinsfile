@@ -6,6 +6,16 @@ pipeline {
     }
 
     stages {
+        stage('Checkout Master Branch') {
+            steps {
+                script {
+                    sh """
+                    git checkout master
+                    git pull origin master
+                    """
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
@@ -31,11 +41,11 @@ pipeline {
                 script {
                     sh """
                     sed -i 's|image: gcr.io/devopsduniya/devopsduniya:.*|image: gcr.io/devopsduniya/devopsduniya:${env.BUILD_NUMBER}|g' k8s/deployment.yaml
-                    git config --global user.email 'ktyagi0602@gmail.com'
-                    git config --global user.name 'krityagi'
+                    git config --global user.email 'your-email@example.com'
+                    git config --global user.name 'your-username'
                     git add k8s/deployment.yaml
                     git commit -m 'Update image tag to ${env.BUILD_NUMBER}'
-                    git push origin main
+                    git push origin master
                     """
                 }
             }
