@@ -42,7 +42,7 @@ pipeline {
                     script {
                         sh """
                         git tag v${env.BUILD_NUMBER}
-                        git push https://krityagi:${GITHUB_TOKEN}@github.com/krityagi/DevOpsDuniya.git v${env.BUILD_NUMBER}
+                        git push https://krityagi:${GITHUB_TOKEN}@github.com/krityagi/DevOpsDuniya.git ${env.BUILD_NUMBER}
                         """
                     }
                 }
@@ -55,7 +55,7 @@ pipeline {
                         sh """
                         curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
                              -H "Accept: application/vnd.github.v3+json" \
-                             -d '{"event_type":"jenkins_trigger", "client_payload": {"tag": "v${env.BUILD_NUMBER}"}}' \
+                             -d '{"event_type":"jenkins_trigger", "client_payload": {"tag": "${env.BUILD_NUMBER}"}}' \
                              https://api.github.com/repos/krityagi/DevOpsDuniya/dispatches
                         """
                     }
