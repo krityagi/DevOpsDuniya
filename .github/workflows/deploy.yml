@@ -1,9 +1,8 @@
 name: Deploy to GKE
 
 on:
-  push:
-    branches:
-      - master
+  repository_dispatch:
+    types: [jenkins_trigger]
 
 jobs:
   deploy:
