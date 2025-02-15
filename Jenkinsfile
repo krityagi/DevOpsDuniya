@@ -41,8 +41,8 @@ pipeline {
                 script {
                     sh """
                     sed -i 's|image: gcr.io/devopsduniya/devopsduniya:.*|image: gcr.io/devopsduniya/devopsduniya:${env.BUILD_NUMBER}|g' k8s/deployment.yaml
-                    git config --global user.email 'your-email@example.com'
-                    git config --global user.name 'your-username'
+                    git config --global user.email 'ktyagi0602@gmail.com'
+                    git config --global user.name 'krityagi'
                     git add k8s/deployment.yaml
                     git commit -m 'Update image tag to ${env.BUILD_NUMBER}'
                     git push origin master
