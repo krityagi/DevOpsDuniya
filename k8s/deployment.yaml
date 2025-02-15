@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: devopsduniya
-        image: gcr.io/devopsduniya/devopsduniya:46
+        image: gcr.io/devopsduniya/devopsduniya:47
         ports:
         - containerPort: 3000
