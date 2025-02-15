@@ -15,9 +15,9 @@ spec:
       containers:
       - name: devopsduniya
 <<<<<<< HEAD
-        image: gcr.io/devopsduniya/devopsduniya:${IMAGE_TAG}
+        image: gcr.io/devopsduniya/devopsduniya:52
 =======
-        image: gcr.io/devopsduniya/devopsduniya:49
+        image: gcr.io/devopsduniya/devopsduniya:52
 >>>>>>> 01d55fdd9ded34c94e026cb99930ab52552cd0b3
         ports:
         - containerPort: 3000
