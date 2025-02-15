@@ -28,7 +28,7 @@ pipeline {
         }
         stage('Trigger GitHub Actions') {
             steps {
-                withCredentials([string(credentialsId: 'Git_PAT', variable: 'GITHUB_TOKEN')]) {
+                withCredentials([string(credentialsId: 'GitHub_Token', variable: 'GITHUB_TOKEN')]) {
                     script {
                         sh """
                         curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
