@@ -6,7 +6,26 @@ pipeline {
     }
 
     stages {
+        stage('Check if Image Exists') {
+            steps {
+                script {
+                    def imageExists = sh(returnStatus: true, script: "gcloud container images describe ${DOCKER_IMAGE}") == 0
+                    if (imageExists) {
+                        currentBuild.result = 'SUCCESS'
+                        echo "Image already exists. Skipping build and push."
+                        exit 0
+                    }
+                }
+            }
+        }
         stage('Build Docker Image') {
+            when {
+                not {
+                    expression {
+                        sh(returnStatus: true, script: "gcloud container images describe ${DOCKER_IMAGE}") == 0
+                    }
+                }
+            }
             steps {
                 script {
                     sh 'docker build -t ${DOCKER_IMAGE} .'
@@ -14,6 +33,13 @@ pipeline {
             }
         }
         stage('Push Docker Image') {
+            when {
+                not {
+                    expression {
+                        sh(returnStatus: true, script: "gcloud container images describe ${DOCKER_IMAGE}") == 0
+                    }
+                }
+            }
             steps {
                 withCredentials([file(credentialsId: 'gcr-service-account', variable: 'GCP_KEYFILE')]) {
                     script {
