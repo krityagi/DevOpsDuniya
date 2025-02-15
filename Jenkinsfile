@@ -51,7 +51,7 @@ pipeline {
                     }
                 }
             }
-        
+        }
         stage('Trigger GitHub Actions') {
             steps {
                 withCredentials([string(credentialsId: 'GitHub_Token', variable: 'GITHUB_TOKEN')]) {
