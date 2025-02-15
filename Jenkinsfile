@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "gcr.io/devopsduniya/devopsduniya:${env.BUILD_NUMBER}"
-        IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
@@ -37,18 +36,13 @@ pipeline {
                 }
             }
         }
-        stage('Update deployment.yaml') {
+        stage('Tag and Push') {
             steps {
                 withCredentials([string(credentialsId: 'GitHub_Token', variable: 'GITHUB_TOKEN')]) {
                     script {
                         sh """
-                        git checkout deploy || git checkout -b deploy
-                        sed -i 's|image: gcr.io/devopsduniya/devopsduniya:.*|image: gcr.io/devopsduniya/devopsduniya:${env.BUILD_NUMBER}|g' k8s/deployment.yaml
-                        git config --global user.email 'ktyagi0602@gmail.com'
-                        git config --global user.name 'krityagi'
-                        git add k8s/deployment.yaml
-                        git commit -m 'Update image tag to ${env.BUILD_NUMBER}'
-                        git push https://krityagi:${GITHUB_TOKEN}@github.com/krityagi/DevOpsDuniya.git deploy
+                        git tag v${env.BUILD_NUMBER}
+                        git push https://krityagi:${GITHUB_TOKEN}@github.com/krityagi/DevOpsDuniya.git v${env.BUILD_NUMBER}
                         """
                     }
                 }

@@ -1,6 +1,9 @@
 name: Deploy to GKE
 
 on:
+  push:
+    tags:
+      - 'v*'
   repository_dispatch:
     types: [jenkins_trigger]
 
@@ -28,6 +31,8 @@ jobs:
           gcloud container clusters get-credentials k8s-cluster --zone europe-west1-b --project ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Deploy to GKE
+        env:
+          IMAGE_TAG: ${{ github.ref_name }}
         run: |
-          kubectl apply -f k8s/deployment.yaml
+          envsubst < k8s/deployment.yaml | kubectl apply -f -
           kubectl apply -f k8s/service.yaml
