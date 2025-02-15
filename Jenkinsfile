@@ -41,7 +41,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'GitHub_Token', variable: 'GITHUB_TOKEN')]) {
                     script {
                         sh """
-                        git tag v${env.BUILD_NUMBER}
+                        git tag ${env.BUILD_NUMBER}
                         git push https://krityagi:${GITHUB_TOKEN}@github.com/krityagi/DevOpsDuniya.git ${env.BUILD_NUMBER}
                         """
                     }
