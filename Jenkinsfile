@@ -3,19 +3,13 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "gcr.io/devopsduniya/devopsduniya:${env.BUILD_NUMBER}"
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
         stage('Checkout Master Branch') {
             steps {
                 script {
-                    // Skip pipeline if the commit message contains '[ci skip]'
-                    def skipBuild = sh(script: "git log -1 --pretty=%B", returnStdout: true).contains('[ci skip]')
-                    if (skipBuild) {
-                        currentBuild.result = 'SUCCESS'
-                        error('Skipping build as this is a [ci skip] commit')
-                    }
-                    
                     sh """
                     git checkout master
                     git pull origin master
@@ -48,12 +42,13 @@ pipeline {
                 withCredentials([string(credentialsId: 'GitHub_Token', variable: 'GITHUB_TOKEN')]) {
                     script {
                         sh """
+                        git checkout deploy || git checkout -b deploy
                         sed -i 's|image: gcr.io/devopsduniya/devopsduniya:.*|image: gcr.io/devopsduniya/devopsduniya:${env.BUILD_NUMBER}|g' k8s/deployment.yaml
                         git config --global user.email 'ktyagi0602@gmail.com'
                         git config --global user.name 'krityagi'
                         git add k8s/deployment.yaml
-                        git commit -m 'Update image tag to ${env.BUILD_NUMBER} [ci skip]'
-                        git push https://krityagi:${GITHUB_TOKEN}@github.com/krityagi/DevOpsDuniya.git master
+                        git commit -m 'Update image tag to ${env.BUILD_NUMBER}'
+                        git push https://krityagi:${GITHUB_TOKEN}@github.com/krityagi/DevOpsDuniya.git deploy
                         """
                     }
                 }
@@ -66,7 +61,7 @@ pipeline {
                         sh """
                         curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
                              -H "Accept: application/vnd.github.v3+json" \
-                             https://api.github.com/repos/krityagi/devopsduniya/dispatches \
+                             https://api.github.com/repos/krityagi/DevOpsDuniya/dispatches \
                              -d '{"event_type":"jenkins_trigger"}'
                         """
                     }
