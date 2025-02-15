@@ -55,8 +55,8 @@ pipeline {
                         sh """
                         curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
                              -H "Accept: application/vnd.github.v3+json" \
-                             https://api.github.com/repos/krityagi/DevOpsDuniya/dispatches \
-                             -d '{"event_type":"jenkins_trigger"}'
+                             -d '{"event_type":"jenkins_trigger", "client_payload": {"tag": "v${env.BUILD_NUMBER}"}}' \
+                             https://api.github.com/repos/krityagi/DevOpsDuniya/dispatches
                         """
                     }
                 }
