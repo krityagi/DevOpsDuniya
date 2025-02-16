@@ -47,10 +47,12 @@ const loginLimiter = rateLimit({
 });
 
 router.get('/login', (req, res) => {
+    console.log('Login page requested');
     res.sendFile(path.join(__dirname, '../views/login.html'));
 });
 
 router.get('/register', (req, res) => {
+    console.log('Register page requested');
     res.sendFile(path.join(__dirname, '../views/register.html'));
 });
 
