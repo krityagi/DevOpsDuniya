@@ -87,28 +87,28 @@ router.post('/register', async (req, res) => {
 
     if (password !== confirmPassword) {
         console.error('Passwords do not match');
-        return res.status(400).json({ message: 'Passwords do not match' }); // Return JSON response
+        return res.status(400).json({ message: 'Passwords do not match' });
     }
 
     try {
-        console.log('Checking if email already exists');
+        console.log('Connecting to database...');
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
             console.error('Email already in use');
-            return res.status(400).json({ message: 'Email already in use' }); // Return JSON response
+            return res.status(400).json({ message: 'Email already in use' });
         }
 
-        console.log('Hashing password');
+        console.log('Hashing password...');
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({ name, email, password: hashedPassword });
 
-        console.log('Saving new user');
+        console.log('Saving new user...');
         await newUser.save();
         console.log('User registered successfully:', newUser);
-        return res.status(200).json({ message: 'Registration successful' }); // Return JSON response
+        return res.status(200).json({ message: 'Registration successful' });
     } catch (err) {
         console.error('Error during registration:', err);
-        return res.status(500).json({ message: 'Error saving user: ' + err.message }); // Return JSON response
+        return res.status(500).json({ message: 'Error saving user: ' + err.message });
     }
 });
 
