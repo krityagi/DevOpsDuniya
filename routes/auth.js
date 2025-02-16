@@ -119,7 +119,7 @@ router.post('/login', async (req, res) => {
     console.log('Login attempt:', { email });
 
     try {
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
             console.error('User not found');
             return res.status(400).json({ message: 'Invalid credentials' });
@@ -145,6 +145,7 @@ router.post('/login', async (req, res) => {
         return res.status(500).json({ message: 'Error during login: ' + err.message });
     }
 });
+
 
 router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
