@@ -113,8 +113,10 @@ router.post('/register', async (req, res) => {
 });
 
 
-router.post('/login', loginLimiter, async (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
+
+    console.log('Login attempt:', { email });
 
     try {
         const user = await User.findOne({ email: email });
@@ -123,7 +125,11 @@ router.post('/login', loginLimiter, async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
+        console.log('User found:', user); // Log user details without the password
+
         const match = await bcrypt.compare(password, user.password);
+        console.log('Password match result:', match); // Log the result of password comparison
+
         if (!match) {
             console.error('Password mismatch');
             return res.status(400).json({ message: 'Invalid credentials' });
@@ -133,10 +139,10 @@ router.post('/login', loginLimiter, async (req, res) => {
         
         req.session.user = user;
         console.log('Login successful');
-        res.status(200).json({ message: 'Login successful', redirectUrl: '/dashboard' });
+        return res.status(200).json({ message: 'Login successful', redirectUrl: '/dashboard' });
     } catch (err) {
         console.error('Error during login:', err);
-        res.status(500).json({ message: 'Error during login: ' + err });
+        return res.status(500).json({ message: 'Error during login: ' + err.message });
     }
 });
 
