@@ -17,15 +17,24 @@ spec:
         image: gcr.io/devopsduniya/devopsduniya:${IMAGE_TAG}
         ports:
         - containerPort: 3000
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongo:27017/devopsduniya"  # Replace with your database name
+        - name: CLIENT_ID
+          value: "your-client-id"  # Replace with your actual client ID
+        - name: CLIENT_SECRET
+          value: "your-client-secret"  # Replace with your actual client secret
+        - name: REFRESH_TOKEN
+          value: "1//047kz0bIO2uj8CgYIARAAGAQSNwF-L9IrcZv7ZnheniYISYD_AUxe8Xa2N8anII0ebUcDBGJ-D_jnIu9ZWNTb5CDyzRSoj5QV5jA"  # Ensure this value is correct
         livenessProbe:
           httpGet:
-            path: /healthz
+            path: /healthz  # Ensure this path exists and returns a success status code
             port: 3000
           initialDelaySeconds: 30
           periodSeconds: 10
         readinessProbe:
           httpGet:
-            path: /readiness
+            path: /readiness  # Ensure this path exists and returns a success status code
             port: 3000
           initialDelaySeconds: 30
           periodSeconds: 10

@@ -37,6 +37,16 @@ app.use((req, res, next) => {
     next();
 });
 
+// Health check endpoint
+app.get('/healthz', (req, res) => {
+    res.status(200).send('OK');
+});
+
+// Readiness check endpoint
+app.get('/readiness', (req, res) => {
+    res.status(200).send('Ready');
+});
+
 // Add a route to handle GET requests to the root URL
 app.get('/', (req, res) => {
     res.send('Welcome to the Home Page!');
