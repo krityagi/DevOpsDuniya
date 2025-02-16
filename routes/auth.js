@@ -46,8 +46,6 @@ const loginLimiter = rateLimit({
     message: 'Too many login attempts, please try again later.',
 });
 
-
-
 router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/login.html'));
 });
@@ -83,13 +81,17 @@ router.get('/admin', isAdmin, (req, res) => {
 router.post('/register', async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
 
+    console.log('Registration attempt:', req.body); // Log the request body
+
     if (password !== confirmPassword) {
+        console.error('Passwords do not match');
         return res.status(400).send('Passwords do not match');
     }
 
     try {
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
+            console.error('Email already in use');
             return res.status(400).send('Email already in use');
         }
 
@@ -97,8 +99,10 @@ router.post('/register', async (req, res) => {
         const newUser = new User({ name, email, password: hashedPassword });
 
         await newUser.save();
+        console.log('User registered successfully:', newUser); // Log successful registration
         res.redirect('/login');
     } catch (err) {
+        console.error('Error saving user:', err); // Log the error
         res.status(500).send('Error saving user: ' + err);
     }
 });
