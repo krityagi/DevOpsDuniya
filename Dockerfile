@@ -1,4 +1,3 @@
-# Use the official Node.js image
 FROM node:20.18.0
 
 # Create and change to the app directory
