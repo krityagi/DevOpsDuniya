@@ -4,7 +4,7 @@ metadata:
   name: devopsduniya-service
 spec:
   selector:
-    app: devopsduniya
+    app: {{ .Release.Name }}
   ports:
     - protocol: TCP
       port: 80
