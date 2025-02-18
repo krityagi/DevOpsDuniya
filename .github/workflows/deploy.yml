@@ -12,6 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install Helm
+        run: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
@@ -27,25 +30,11 @@ jobs:
         run: |
           gcloud container clusters get-credentials k8s-cluster --zone europe-west1-b --project ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Deploy MongoDB Persistent Volume
-        run: kubectl apply -f k8s/mongo-pv.yaml
-
-      - name: Deploy MongoDB Persistent Volume Claim
-        run: kubectl apply -f k8s/mongo-pvc.yaml
-
-      - name: Deploy MongoDB Secret
-        run: kubectl apply -f k8s/mongo-secret.yaml
-
-      - name: Deploy MongoDB StatefulSet
-        run: kubectl apply -f k8s/mongo-statefulset.yaml
-
-      - name: Deploy MongoDB Service
-        run: kubectl apply -f k8s/mongo-service.yaml
-
-      - name: Deploy to GKE
+      - name: Deploy to GKE with Helm
         if: github.event_name == 'repository_dispatch' && github.event.action == 'jenkins_trigger' && github.event.client_payload.tag != null
         env:
           IMAGE_TAG: ${{ github.event.client_payload.tag }}
         run: |
-          envsubst < k8s/deployment.yaml | kubectl apply -f -
-          kubectl apply -f k8s/service.yaml
+          helm repo add my-repo https://path-to-your-helm-repo
+          helm repo update
+          helm upgrade --install my-app my-repo/my-app --namespace default --set image.tag=${{ env.IMAGE_TAG }}

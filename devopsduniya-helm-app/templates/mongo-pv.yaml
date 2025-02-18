@@ -4,10 +4,8 @@ metadata:
   name: mongo-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: manual
   hostPath:
-    path: /data/mongo
+    path: "/mnt/data"
