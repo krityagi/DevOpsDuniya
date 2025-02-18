@@ -35,6 +35,4 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.event.client_payload.tag }}
         run: |
-          helm repo add my-repo https://path-to-your-helm-repo
-          helm repo update
-          helm upgrade --install my-app my-repo/my-app --namespace default --set image.tag=${{ env.IMAGE_TAG }}
+          helm upgrade --install devopsduniya-helm-app ./devopsduniya-helm-app --namespace default --set image.tag=${{ env.IMAGE_TAG }}
